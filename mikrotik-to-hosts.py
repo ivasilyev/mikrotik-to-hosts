@@ -228,9 +228,9 @@ def parse_args():
                                    "and updates the system hosts file",
                        epilog="")
     p.add_argument("-f", "--flush", help="(Optional) Flush DNS records", action="store_true")
-    p.add_argument("-n", "--user", help="(Optional) MikroTik device user name", default="admin")
-    p.add_argument("-n", "--user", help="(Optional) MikroTik device IP address", default="192.168.88.1")
-    p.add_argument("-n", "--user", help="(Optional) MikroTik device SSH listen port", type=int, default=22)
+    p.add_argument("-u", "--user", help="(Optional) MikroTik device user name", default="admin")
+    p.add_argument("-t", "--host", help="(Optional) MikroTik device IP address", default="192.168.88.1")
+    p.add_argument("-p", "--port", help="(Optional) MikroTik device SSH listen port", type=int, default=22)
     p.add_argument("-s", "--suffix", help="(Optional) Default suffix", default=DEFAULT_SUFFIX)
     ns = p.parse_args()
     return (
