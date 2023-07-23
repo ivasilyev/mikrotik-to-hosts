@@ -43,6 +43,16 @@ sshpass -p \
         -p ${MIKROTIK_PORT} \
     "${MIKROTIK_USER}@${MIKROTIK_HOST}"
 
+# Alternative SSH key exchange method if you're getting something like syntax errors
+sshpass -p \
+    "${MIKROTIK_PASSWORD}" \
+    ssh "${MIKROTIK_USER}@${MIKROTIK_HOST}" -p ${MIKROTIK_PORT} "
+        /file print file=mykey; 
+        file set mykey contents=\"`cat "${HOME}/.ssh/id_rsa.pub"`\";
+        /user ssh-keys import public-key-file=mykey.txt;
+        /ip ssh set always-allow-password-login=yes;
+    "
+
 # Empty the input
 clear
 ```
