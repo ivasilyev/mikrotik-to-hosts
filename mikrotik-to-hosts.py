@@ -283,3 +283,6 @@ if __name__ == '__main__':
     new_hosts_content = join_table(new_hosts_lines)
     dump_string(new_hosts_content, HOSTS_FILE)
     logging.info("Hosts update completed")
+
+    if input_is_flush:
+        flush_dns()
