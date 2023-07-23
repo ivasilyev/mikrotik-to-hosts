@@ -24,8 +24,8 @@ sudo apt-get install \
     sshpass
 
 # Add a SSH identity only if you do not have one
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -C "$(hostname)_ssh_key" -q -N "" && \
-ssh-add ~/.ssh/id_rsa
+ssh-keygen -t rsa -b 4096 -f "${HOME}/.ssh/id_rsa" -C "$(hostname)_ssh_key" -q -N "" && \
+ssh-add "${HOME}/.ssh/id_rsa"
 
 # Export environment variables
 export MIKROTIK_HOST="192.168.88.1"
@@ -53,6 +53,20 @@ sshpass -p \
         /ip ssh set always-allow-password-login=yes;
     "
 
+# Deploy the tool
+sudo mkdir \
+    --parent \
+    --mode 755 \
+    "/opt/mikrotik-to-hosts"
+
+cd "/opt/mikrotik-to-hosts" && \
+sudo curl -fsSLO \
+    "https://raw.githubusercontent.com/ivasilyev/mikrotik-to-hosts/master/mikrotik-to-hosts.py"
+
+sudo chmod -R 755 "/opt/mikrotik-to-hosts"
+
+cd
+
 # Empty the input
 clear
 ```
@@ -68,4 +82,34 @@ ssh -t "${MIKROTIK_USER}@${MIKROTIK_HOST}" -p ${MIKROTIK_PORT} "
     :delay 1000ms;
     /quit;
 "
+```
+
+## Run in debug mode
+
+```shell script
+export LOGGING_LEVEL="DEBUG"
+
+sudo python3 "/opt/mikrotik-to-hosts/mikrotik-to-hosts.py" \
+| tee "/tmp/mikrotik-to-hosts.log" 2>&1
+
+cat "/tmp/mikrotik-to-hosts.log"
+```
+
+## Check updated `hosts`
+
+```shell script
+cat /etc/hosts
+```
+
+## Add `cron` rules
+
+```shell script
+sudo crontab -e
+```
+```text
+# mikrotik-to-hosts
+0 0 * * * "/usr/bin/python3" "/opt/arp-to-hosts/mikrotik-to-hosts.py" --host "192.168.88.1" --suffix "lan" > /dev/null 2>&1
+```
+```shell script
+sudo crontab -l
 ```
