@@ -87,9 +87,10 @@ ssh -t "${MIKROTIK_USER}@${MIKROTIK_HOST}" -p ${MIKROTIK_PORT} "
 ## Run in debug mode
 
 ```shell script
-export LOGGING_LEVEL="DEBUG"
-
+LOGGING_LEVEL="DEBUG" \
 sudo python3 "/opt/mikrotik-to-hosts/mikrotik-to-hosts.py" \
+    --host "192.168.88.1" \
+    --suffix "lan"  \
 | tee "/tmp/mikrotik-to-hosts.log" 2>&1
 
 cat "/tmp/mikrotik-to-hosts.log"
@@ -98,7 +99,7 @@ cat "/tmp/mikrotik-to-hosts.log"
 ## Check updated `hosts`
 
 ```shell script
-cat /etc/hosts
+sudo nano /etc/hosts
 ```
 
 ## Add `cron` rules
